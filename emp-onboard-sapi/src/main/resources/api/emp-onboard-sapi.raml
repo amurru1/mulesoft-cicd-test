@@ -1,0 +1,157 @@
+#%RAML 1.0
+title: emp-onboard-sapi
+description: This api is for employee onboarding in a company!
+baseUri: https://localhost:8081/emp-sapi/v1
+
+securitySchemes:
+  basic:
+    description: |
+        This API supports basic auth
+    type: Basic Authentication
+
+
+/add-employee:
+  displayName: addEmployee
+  description: addEmployee resource to add employees into db.
+  post:
+    body:
+      application/json:
+        example:
+          {
+            "empid" : 200,
+            "empname" : "Ajay",
+            "status": "A"
+          }
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              {
+                "status": 200,
+                "message": "Success!"
+              }
+      500:
+        body:
+          application/json:
+            example:
+              {
+                "status": 500,
+                "message": "Internal Server Error!"
+              }
+/update-employee:
+  displayName: updateEmployee
+  description: To update a Employee status
+  post:
+    body:
+      application/xml:
+        example:
+          <?xml version="1.0" encoding="UTF-8"?>
+            <emp>
+              <empid>200</empid>
+              <empname>Ajay</empname>
+              <status>A</status>
+            </emp>
+    responses:
+      200:
+        body:
+          application/xml:
+            example:
+              <?xml version="1.0" encoding="UTF-8"?>
+                <response>
+                    <status> 200 </status>
+                    <message>Success</message>
+                  </response>
+      415:
+        description:  If the media type doent'match to the client required Content-Type
+        body:
+          application/xml:
+            example:
+              <?xml version="1.0" encoding="UTF-8"?>
+                <response>
+                  <status> 415 </status>
+                  <message>Unsupported Media Type</message>
+                </response>
+      500:
+        description: It is a generic error message,when an unexpected condition encountered and no more specific message is suitable.
+        body:
+          application/xml:
+            example:
+              <?xml version="1.0" encoding="UTF-8"?>
+                <response>
+                  <status> 500 </status>
+                  <message>Internal Server Error</message>
+                </response>
+/fetch-employee:
+  displayName: fetchEmployee
+  description: To get the employee details using their empid as query param.
+  get:
+    queryParameters:
+      empid:
+        displayName: EmployeeID
+        required: true
+        type: integer
+        example: 100
+    
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              {
+                "empid" : 100,
+                "empname" : "Ajay",
+                "status" : "A"
+              }
+      404:
+        description: If the required content not found
+        body:
+          application/json:
+            example:
+              {
+                "status": 404,
+                "message": "No Employee Found!"
+              }
+      500:
+        description: It is a generic error message,when an unexpected condition encountered and no more specific message is suitable.
+        body:
+          application/json:
+            example:
+              {
+                "status": 500,
+                "message": "Internal Server Error!"
+              }
+/delete-employee/(empid):
+  displayName: deleteEmployee
+  description: To delete the employee details by passing empid as uri param.
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              {
+                "empid" : 100,
+                "empname" : "Ajay",
+                "status" : "A"
+              }
+      404:
+        description: If the required content not found
+        body:
+          application/json:
+            example:
+              {
+                "status": 404,
+                "message": "No Employee Found!"
+              }
+      500:
+        description: It is a generic error message, when an unexpected condition encountered and no more specific message is suitable.
+        body:
+          application/json:
+            example:
+              {
+                "status": 500,
+                "message": "Internal Server Error!"
+              }
+      
+              
